@@ -28,7 +28,7 @@ export default {
     data() {
         return {
             query: '',
-            count: 5,
+            count: 10,
             news: [],
             needMore: true,
             inProgress: false,

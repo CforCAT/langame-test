@@ -24,7 +24,12 @@
         </div>
         <div class="flex flex-row items-center gap-4">
             @can('admin')
-                <a href="{{ route('admin.index') }}">Admin panel</a>
+                <a class="@if(request()->is('admin')) text-black @else text-gray-400 @endif"
+                   href="{{ route('admin.index') }}">Users</a>
+                <a class="@if(request()->is('admin/codes')) text-black @else text-gray-400 @endif"
+                   href="{{ route('admin.codes') }}">Codes</a>
+                <a class="@if(request()->is('admin/news')) text-black @else text-gray-400 @endif"
+                   href="{{ route('admin.news') }}">News</a>
             @endcan
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
@@ -37,7 +42,9 @@
             </form>
         </div>
     </div>
-    {{ $slot }}
+    <div class="w-full max-w-[877px] flex flex-col gap-6">
+        {{ $slot }}
+    </div>
 </div>
 </body>
 </html>

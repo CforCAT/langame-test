@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Attributes\SearchUsingFullText;
-use Laravel\Scout\Attributes\SearchUsingPrefix;
 use Laravel\Scout\Searchable;
 
 class News extends Model
@@ -45,5 +44,12 @@ class News extends Model
             'title' => $this->title,
             'description' => $this->description,
         ];
+    }
+
+    public function getProviderAttribute($value): string
+    {
+        return match ($value) {
+            'sports' => 'Sports.ru'
+        };
     }
 }
