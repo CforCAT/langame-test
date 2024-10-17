@@ -73,20 +73,19 @@ export default {
             }
         },
         search() {
-            this.page = 1;
-            this.getNextNews();
+            this.getNextNews(null, true);
         },
-        getNextNews(before) {
+        getNextNews(before, refresh) {
             if (this.inProgress)
                 return
 
             let after = '';
 
-            if (before === true) {
+            if (before === true && refresh !== true) {
                 before = this.news.length > 0 ? this.news[0].published_at : '2000-00-00T00:00:00Z';
             } else {
                 before = '';
-                if (this.news.length > 0)
+                if (this.news.length > 0 && refresh !== true)
                     after = this.news[this.news.length - 1].published_at;
             }
 
@@ -94,18 +93,22 @@ export default {
 
             axios.get('/news?after=' + after + '&count=' + this.count + '&query=' + this.query + '&before=' + before)
                 .then(response => {
-                    if (before) {
-                        this.news.unshift(...response.data);
-                    } else {
-                        this.news.push(...response.data);
-                    }
+                        if (refresh === true) {
+                            this.needMore = true;
+                            this.news = response.data;
+                        } else if (before) {
+                            this.news.unshift(...response.data);
+                        } else {
+                            this.news.push(...response.data);
+                        }
 
-                    if (response.data.length < this.count) {
-                        this.needMore = false;
-                    }
+                        if (response.data.length < this.count) {
+                            this.needMore = false;
+                        }
 
-                    this.inProgress = false;
-                })
+                        this.inProgress = false;
+                    }
+                )
                 .catch((e) => {
                     alert(e);
                 })
