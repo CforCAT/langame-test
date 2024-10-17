@@ -112,4 +112,10 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    'code' => [
+        'length' => (int) env('AUTH_CODE_LENGTH', 4),
+        'expire' => (int) env('AUTH_CODE_EXPIRE', 10),
+        'throttle' => (int) env('AUTH_CODE_THROTTLE', 10),
+    ]
+
 ];
