@@ -6,7 +6,6 @@ use App\Exceptions\CodeErrorException;
 use App\Exceptions\CodeThrottleException;
 use App\Exceptions\UserAlreadyRegisteredException;
 use App\Exceptions\UserNotRegisteredException;
-use App\Helpers\Phone;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\VerifyRequest;
@@ -27,7 +26,7 @@ class AuthController extends Controller
     public function loginPost(LoginRequest $request, AuthService $authService): JsonResponse
     {
         try {
-            $authService->login(Phone::normalize($request->input('phone')));
+            $authService->login($request->input('phone'));
         } catch (UserNotRegisteredException) {
             return response()->json([
                 'success' => false,
@@ -53,7 +52,7 @@ class AuthController extends Controller
     public function registerPost(RegisterRequest $request, AuthService $authService): JsonResponse
     {
         try {
-            $authService->register(Phone::normalize($request->input('phone')), $request->input('name'));
+            $authService->register($request->input('phone'), $request->input('name'));
         } catch (UserAlreadyRegisteredException) {
             return response()->json([
                 'success' => false,
@@ -74,7 +73,7 @@ class AuthController extends Controller
     public function verify(VerifyRequest $request, AuthService $authService): JsonResponse
     {
         try {
-            $user = $authService->verify(Phone::normalize($request->input('phone')), $request->input('code'));
+            $user = $authService->verify($request->input('phone'), $request->input('code'));
         } catch (UserNotRegisteredException) {
             return response()->json([
                 'success' => false,
